@@ -1,0 +1,860 @@
+<html>
+<head>
+	<title>Profile of <%= name[0].name %></title>
+	<link rel="icon" href="/assets/myp.png" type="image/gif" sizes="18x18">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: red;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+</style>
+<script>
+
+$(document).ready(function(){
+
+
+        $("#bt").click(function(){
+		hideMode();
+	});
+
+        $("#sb").click(function(){
+		editMode();
+	});
+
+        $("#sbl").click(function(){
+		editModeLL();
+	});
+
+        $("#sba").click(function(){
+		editModeAD();
+	});
+
+        $("#sbe").click(function(){
+		editModeEM();
+	});
+
+        $("#ed").click(function(){
+
+	$(".mbid").prop("checked", false);
+
+	var w = document.getElementById("ed");
+	var x = document.getElementById("add");
+	var y = document.getElementById("sb");
+	var z = document.getElementById("del");
+
+	y.hidden = false;
+	w.hidden = true;
+            $('input[class="mbnm"]').each(function(){
+            	if($(this).val()===null || $(this).val()===undefined || $(this).val()===""){
+                    $(this).parents("tr").remove();
+                }
+            });
+/*	$(".mbid").prop("checked", false);
+        $(".mbid").prop("disabled", true);
+        $(".mblb").prop("disabled", true);
+        $(".mbnm").prop("disabled", true);*/
+	x.hidden = true;
+	z.hidden = true;
+	});
+
+        $("#edl").click(function(){
+	$(".llid").prop("checked", false);
+	var w = document.getElementById("edl");
+	var x = document.getElementById("addl");
+	var y = document.getElementById("sbl");
+	var z = document.getElementById("dell");
+
+	y.hidden = false;
+	w.hidden = true;
+            $('input[class="llnm"]').each(function(){
+            	if($(this).val()===null || $(this).val()===undefined || $(this).val()===""){
+                    $(this).parents("tr").remove();
+                }
+            });
+/*	$(".llid").prop("checked", false);
+        $(".llid").prop("disabled", true);
+        $(".lllb").prop("disabled", true);
+        $(".llnm").prop("disabled", true);*/
+	x.hidden = true;
+	z.hidden = true;
+	});
+
+        $("#eda").click(function(){
+	$(".adid").prop("checked", false);
+	var w = document.getElementById("eda");
+	var x = document.getElementById("adda");
+	var y = document.getElementById("sba");
+	var z = document.getElementById("dela");
+
+	y.hidden = false;
+	w.hidden = true;
+            $('input[class="adnm"]').each(function(){
+            	if($(this).val()===null || $(this).val()===undefined || $(this).val()===""){
+                    $(this).parents("tr").remove();
+                }
+            });
+
+/*	$(".adid").prop("checked", false);
+        $(".adid").prop("disabled", true);
+        $(".adlb").prop("disabled", true);
+        $(".adnm").prop("disabled", true);*/
+	x.hidden = true;
+	z.hidden = true;
+	});
+
+        $("#ede").click(function(){
+
+	$(".emid").prop("checked", false);
+
+	var w = document.getElementById("ede");
+	var x = document.getElementById("adde");
+	var y = document.getElementById("sbe");
+	var z = document.getElementById("dele");
+
+	y.hidden = false;
+	w.hidden = true;
+            $('input[class="emnm"]').each(function(){
+            	if($(this).val()===null || $(this).val()===undefined || $(this).val()===""){
+                    $(this).parents("tr").remove();
+                }
+            });
+/*	$(".mbid").prop("checked", false);
+        $(".mbid").prop("disabled", true);
+        $(".mblb").prop("disabled", true);
+        $(".mbnm").prop("disabled", true);*/
+	x.hidden = true;
+	z.hidden = true;
+	});
+
+	hideMode();
+
+	loadContact();
+
+	loadDoc();
+
+	$("#mobtb").on('click',"input[class='mbid']",function(){
+
+	    var z = document.getElementById("del");
+
+	    if($("input[class='mbid']:checked").length > 0){
+       		z.hidden = false;
+	    } else{
+       		z.hidden = true;
+	    }
+	});
+
+
+	$("#mobtb").on('focus',"input[class='mbnm']",function(){
+		var v = $(this).val();
+		var w = document.getElementById("cdtl");
+		var x =$(this).prop("id");
+		var y = "mid"+(x.substr(2,x.length)); 
+		var z = $("#"+y).val();
+
+		$(".cnm").prop("disabled", true);
+		$("#edp").prop("hidden",false);
+		loadPerms(z);
+		w.value = z;
+		loadPerm(z);
+		if($("#sbp").prop("hidden",false)){
+			$("#sbp").prop("hidden",true);
+			visibleMode();
+		}
+		$("#ct").prop('action','/visibility/'+z);
+	});
+
+	$("#lantb").on('click',"input[class='llid']",function(){
+
+	    var z = document.getElementById("dell");
+
+	    if($("input[class='llid']:checked").length > 0){
+       		z.hidden = false;
+	    } else{
+       		z.hidden = true;
+	    }
+	});
+
+
+	$("#lantb").on('focus',"input[class='llnm']",function(){
+		var v = $(this).val();
+		var w = document.getElementById("cdtl");
+		var x =$(this).prop("id");
+		var y = "lid"+(x.substr(2,x.length)); 
+		var z = $("#"+y).val();
+
+		$(".cnm").prop("disabled", true);
+		$("#edp").prop("hidden",false);
+		visibleMode();
+		loadPerms(z);
+		w.value = z;
+		loadPerm(z);
+		if($("#sbp").prop("hidden",false)){
+			$("#sbp").prop("hidden",true);
+			visibleMode();
+		}
+		$("#ct").prop('action','/visibility/'+z);
+	});
+
+	$("#addtb").on('click',"input[class='adid']",function(){
+
+	    var z = document.getElementById("dela");
+
+	    if($("input[class='adid']:checked").length > 0){
+       		z.hidden = false;
+	    } else{
+       		z.hidden = true;
+	    }
+	});
+
+
+	$("#addtb").on('focus',"input[class='adnm']",function(){
+		var v = $(this).val();
+		var w = document.getElementById("cdtl");
+		var x =$(this).prop("id");
+		var y = "aid"+(x.substr(2,x.length)); 
+		var z = $("#"+y).val();
+
+		$(".cnm").prop("disabled", true);
+		$("#edp").prop("hidden",false);
+		visibleMode();
+		loadPerms(z);
+		w.value = z;
+		loadPerm(z);
+		if($("#sbp").prop("hidden",false)){
+			$("#sbp").prop("hidden",true);
+			visibleMode();
+		}
+		$("#ct").prop('action','/visibility/'+z);
+	});
+
+	$("#emltb").on('click',"input[class='emid']",function(){
+
+	    var z = document.getElementById("dele");
+
+	    if($("input[class='emid']:checked").length > 0){
+       		z.hidden = false;
+	    } else{
+       		z.hidden = true;
+	    }
+	});
+
+
+	$("#emltb").on('focus',"input[class='emnm']",function(){
+		var v = $(this).val();
+		var w = document.getElementById("cdtl");
+		var x =$(this).prop("id");
+		var y = "eid"+(x.substr(2,x.length)); 
+		var z = $("#"+y).val();
+
+		$(".cnm").prop("disabled", true);
+		$("#edp").prop("hidden",false);
+		loadPerms(z);
+		w.value = z;
+		loadPerm(z);
+		if($("#sbp").prop("hidden",false)){
+			$("#sbp").prop("hidden",true);
+			visibleMode();
+		}
+		$("#ct").prop('action','/visibility/'+z);
+	});
+
+});
+
+function loadDoc() {
+
+  var xhttp = new XMLHttpRequest();
+  var uname = document.getElementById("uname").value;
+
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/mobile/"+uname, true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+
+					if (JSON.parse(x).length>0){
+					var i;
+					var uid,lblv,numv;
+					var mobj = JSON.parse(x);
+					for(i=0;i<JSON.parse(x).length;i++){
+						uid = mobj[i]._id;
+						lblv = mobj[i].label;
+						numv = mobj[i].contactno;
+
+						var cdtl = uid.substr(4,3);
+						var markup
+						switch (cdtl) {
+						    case "MOB":
+						        markup = "<tr><td><input type='checkbox' name=" +"id"+i+" id=mid" + i + " class='mbid' value="+uid+" disabled='true'></td><td><input type='hidden' id=mhd"+i+" class='mbhd' name="+"hd"+i+" value="+uid+" ></td><td><input type='text' name=" +"label"+i+" class='mblb' value="+"'"+lblv+"'"+" disabled='true' required='true' size='20'></input></td><td><input type='text' id=nm"+i+" class='mbnm' name=" +"number"+i+" value="+"'"+numv+"'"+" disabled='true' required='true'></td></tr>";
+							$("#mobtb").append(markup);
+						        break;
+						    case "LAN":
+						    	markup = "<tr><td><input type='checkbox' name=" +"id"+i+" id=lid" + i + " class='llid' value="+uid+" disabled='true'></td><td><input type='hidden' id=lhd"+i+" class='llhd' name=" +"hd"+i+" value="+uid+" ></td><td><input type='text' name=" +"label"+i+" class='lllb' value="+"'"+lblv+"'"+" disabled='true' required='true'></input></td><td><input type='text' id=nm"+i+" class='llnm' name=" +"number"+i+" value="+"'"+numv+"'"+" disabled='true' required='true'></td></tr>";
+							$("#lantb").append(markup);
+        						break;
+						    case "ADD":
+						        markup = "<tr><td><input type='checkbox' name=" +"id"+i+" id=aid" + i + " class='adid' value="+uid+" disabled='true'></td><td><input type='hidden' id=ahd"+i+" class='adhd' name=" +"hd"+i+" value="+uid+" ></td><td><input type='text' name=" +"label"+i+" class='adlb' value="+"'"+lblv+"'"+" disabled='true' required='true' size='25'></input></td><td><input type='text' id=nm"+i+" class='adnm' name=" +"number"+i+" value="+"'"+numv+"'"+" disabled='true' required='true' size='70'></td></tr>";
+							$("#addtb").append(markup);
+						        break;
+						    case "EML":
+						        markup = "<tr><td><input type='checkbox' name=" +"id"+i+" id=eid" + i + " class='emid' value="+uid+" disabled='true'></td><td><input type='hidden' id=ehd"+i+" class='emhd' name=" +"hd"+i+" value="+uid+" ></td><td><input type='text' name=" +"label"+i+" class='emlb' value="+"'"+lblv+"'"+" disabled='true' required='true'></input></td><td><input type='text' id=nm"+i+" class='emnm' name=" +"number"+i+" value="+"'"+numv+"'"+" disabled='true' required='true'></td></tr>";
+							$("#emltb").append(markup);        
+						        break;
+						}
+
+						}
+					}
+				}
+		}
+		xmlhttp.send(null);
+}
+
+function loadContact() {
+
+
+  var xhttp = new XMLHttpRequest();
+  var uname = document.getElementById("uname").value;
+
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/contact/"+uname, true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+
+					if (JSON.parse(x).length>0){
+
+					var cfname ,clname ,cnm;
+					var mobj = JSON.parse(x);
+					for(i=0;i<JSON.parse(x).length;i++){
+
+						cfullname = mobj[i].cFName + " " + mobj[i].cLName;
+						clname = mobj[i].cLName;
+						cname = mobj[i].contact;
+
+						var markup = "<tr><td><input type='text' class='cfn' value="+ "'"+cfullname+"'" +" size='30' disabled='true'></input></td><td><input type='checkbox' class='cnm' name=" +"cnm"+i+" value="+cname+" disabled='true'></td></tr>";
+						$("#cttb").append(markup);
+						}
+					}
+				}
+		}
+		xmlhttp.send(null);
+}
+
+function loadPerms(cdtl) {
+
+
+  var xhttp = new XMLHttpRequest();
+  var uname = document.getElementById("uname").value;
+  var carr = [];
+			$(".cnm").prop("checked",false);
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/permissions/"+uname+"/"+cdtl, true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+
+					if (JSON.parse(x).length>0){
+
+						var uid,lblv,numv;
+						var mobj = JSON.parse(x);
+						for(i=0;i<mobj.length;i++){
+
+							$(".cnm").each(function(){
+							if($(this).val()===mobj[i].contact){
+								$(this).prop("checked",true);
+							}
+							});
+
+						}
+//
+//							$(".cnm").each(function(){
+//							if(carr.indexOf($(this).val())>-1){
+//								$(this).prop("checked",true);
+//							}
+//						});
+//
+						}
+					}
+			}
+		xmlhttp.send(null);
+}
+
+function fF(){
+	var str,idv; 
+	var uid = document.getElementById("uid").value;
+
+	if(str !== undefined || str !== null || str !== ""){
+		idv = uid+"MOB000";
+		num = 0;
+	}
+
+	if(str === undefined || str === null || str === ""){
+		if($(".mbid").length>0){
+			str = $(".mbid:last").val();
+		        var res = str.substr(7, str.length);
+		        var num = (parseInt(res)+1);
+			var nmstr = num.toString();
+		        idv = str.substr(0,str.length-nmstr.length)+nmstr;
+		}
+	}
+
+	var markup = "<tr><td><input type='checkbox' name=" +"id"+num+" class='mbid' value="+idv+"></td><td><input type='hidden' id=mhd"+num+" class='mbhd' name=" +"hd"+num+" value="+idv+" ></td><td><input type='text' name=" +"label"+num+" class='mblb'></input></td><td><input type='text' class='mbnm' name=" +"number"+num+"></td></tr>";
+	$("#mobtb").append(markup);
+}
+
+function fFLL(){
+	var str, idv; 
+	var uid = document.getElementById("uid").value;
+	if(str !== undefined || str !== null || str !== ""){
+		idv = uid+"LAN000";
+		num = 0;
+	}
+
+	if(str === undefined || str === null || str === ""){
+		if($(".llid").length>0){
+			str = $(".llid:last").val();
+		        var res = str.substr(7, str.length);
+		        var num = (parseInt(res)+1);
+			var nmstr = num.toString();
+		        idv = str.substr(0,str.length-nmstr.length)+nmstr;
+		}
+	}
+
+	var markup = "<tr><td><input type='checkbox' name=" +"id"+num+" class='llid' value="+idv+"></td><td><input type='hidden' id=lhd"+num+" class='llhd' name=" +"hd"+num+" value="+idv+" ></td><td><input type='text' name=" +"label"+num+" class='lllb'></input></td><td><input type='text' class='llnm' name=" +"number"+num+"></td></tr>";
+	$("#lantb").append(markup);
+}
+
+function fFAD(){
+	var str, idv; 
+	var uid = document.getElementById("uid").value;
+
+	if(str !== undefined || str !== null || str !== ""){
+		idv = uid+"ADD000";
+		num = 0;
+	}
+
+	if(str === undefined || str === null || str === ""){
+		if($(".adid").length>0){
+			str = $(".adid:last").val();
+		        var res = str.substr(7, str.length);
+		        var num = (parseInt(res)+1);
+			var nmstr = num.toString();
+		        idv = str.substr(0,str.length-nmstr.length)+nmstr;
+		}
+	}
+
+	var markup = "<tr><td><input type='checkbox' name=" +"id"+num+" class='adid' value="+idv+"></td><td><input type='hidden' id=ahd"+num+" class='adhd' name=" +"hd"+num+" value="+idv+" ></td><td><input type='text' name=" +"label"+num+" class='adlb'></input></td><td><input type='text' class='adnm' name=" +"number"+num+"></td></tr>";
+	$("#addtb").append(markup);
+}
+
+function fFEM(){
+	var str, idv; 
+	var uid = document.getElementById("uid").value;
+
+	if(str !== undefined || str !== null || str !== ""){
+		idv = uid+"EML000";
+		num = 0;
+	}
+
+	if(str === undefined || str === null || str === ""){
+		if($(".emid").length>0){
+			str = $(".emid:last").val();
+		        var res = str.substr(7, str.length);
+		        var num = (parseInt(res)+1);
+			var nmstr = num.toString();
+		        idv = str.substr(0,str.length-nmstr.length)+nmstr;
+		}
+	}
+
+	var markup = "<tr><td><input type='checkbox' name=" +"id"+num+" class='emid' value="+idv+"></td><td><input type='hidden' id=ehd"+num+" class='emhd' name=" +"hd"+num+" value="+idv+" ></td><td><input type='text' name=" +"label"+num+" class='emlb'></input></td><td><input type='text' class='emnm' name=" +"number"+num+"></td></tr>";
+	$("#emltb").append(markup);
+}
+
+function delRow(){
+	    var z = document.getElementById("del");
+
+            $('input[class="mbid"]').each(function(){
+            	if($(this).is(":checked")){
+                    $(this).parents("tr").remove();
+                }
+            });
+	var rlen = document.getElementById("mobtb").rows.length;
+
+	if($("input[class='mbid']:checked").length > 0){
+       		z.hidden = false;
+	    } else{
+       		z.hidden = true;
+	    }
+
+///
+//	if(rlen===0){
+//	    var z = document.getElementById("del");		
+//		       	z.hidden = true;
+//	}
+//
+}
+
+function delRowLL(){
+	    var z = document.getElementById("dell");
+
+            $('input[class="llid"]').each(function(){
+            	if($(this).is(":checked")){
+                    $(this).parents("tr").remove();
+                }
+            });
+	var rlen = document.getElementById("lantb").rows.length;
+
+	if($("input[class='llid']:checked").length > 0){
+     		z.hidden = false;
+	    } else{
+     		z.hidden = true;
+	    }
+
+}
+
+function delRowAD(){
+	    var z = document.getElementById("dela");
+
+            $('input[class="adid"]').each(function(){
+            	if($(this).is(":checked")){
+                    $(this).parents("tr").remove();
+                }
+            });
+	var rlen = document.getElementById("addtb").rows.length;
+
+	if($("input[class='adid']:checked").length > 0){
+     		z.hidden = false;
+	    } else{
+     		z.hidden = true;
+	    }
+
+}
+
+function delRowEM(){
+	    var z = document.getElementById("dele");
+
+            $('input[class="emid"]').each(function(){
+            	if($(this).is(":checked")){
+                    $(this).parents("tr").remove();
+                }
+            });
+	var rlen = document.getElementById("emltb").rows.length;
+
+	if($("input[class='emid']:checked").length > 0){
+     		z.hidden = false;
+	    } else{
+     		z.hidden = true;
+	    }
+
+}
+
+function editMode() {
+	var w = document.getElementById("ed");
+	var x = document.getElementById("add");
+	var y = document.getElementById("sb");
+	var z = document.getElementById("del");
+
+	$(".mbid").prop("disabled", false);
+        $(".mblb").prop("disabled", false);
+        $(".mbnm").prop("disabled", false);
+	x.hidden = false;
+	y.hidden = true;
+	w.hidden = false;
+
+}
+
+function editPerms() {
+	var w = document.getElementById("edp");
+	var y = document.getElementById("sbp");
+
+	$(".cnm").prop("disabled", false);
+	w.hidden = true;
+	y.hidden = false;
+}
+
+function editModeLL() {
+	var w = document.getElementById("edl");
+	var x = document.getElementById("addl");
+	var y = document.getElementById("sbl");
+	var z = document.getElementById("dell");
+
+	$(".llid").prop("disabled", false);
+        $(".lllb").prop("disabled", false);
+        $(".llnm").prop("disabled", false);
+	x.hidden = false;
+	y.hidden = true;
+	w.hidden = false;
+}
+
+function editModeAD() {
+	var w = document.getElementById("eda");
+	var x = document.getElementById("adda");
+	var y = document.getElementById("sba");
+	var z = document.getElementById("dela");
+
+	$(".adid").prop("disabled", false);
+        $(".adlb").prop("disabled", false);
+        $(".adnm").prop("disabled", false);
+	x.hidden = false;
+	y.hidden = true;
+	w.hidden = false;
+}
+
+function editModeEM() {
+	var w = document.getElementById("ede");
+	var x = document.getElementById("adde");
+	var y = document.getElementById("sbe");
+	var z = document.getElementById("dele");
+
+	$(".emid").prop("disabled", false);
+        $(".emlb").prop("disabled", false);
+        $(".emnm").prop("disabled", false);
+	x.hidden = false;
+	y.hidden = true;
+	w.hidden = false;
+}
+
+function hideMode() {
+	var x = document.getElementById("ct");
+	x.style.display = "none";
+}
+
+function visibleMode() {
+	var x = document.getElementById("ct");
+	x.style.display = "block";
+}
+
+
+function loadPerm(contact) {
+
+  var uname = document.getElementById("uname").value;
+
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/cdtl/"+contact, true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+
+					if (JSON.parse(x).length>0){
+						$("#edp").prop("disabled",false);
+						} else{
+							$("#edp").prop("disabled",true);
+						}
+
+					}
+		}
+		xmlhttp.send(null);
+}
+
+
+function checkCdtl(cdtl){
+
+	var xhttp = new XMLHttpRequest();
+
+	xhttp.open("GET", "/cdtl/"+cdtl, true);
+	xhttp.onreadystatechange = function() {
+
+	alert("GG");
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+			y = xhttp.responseText;
+
+			if(JSON.parse(y).length>0){
+				$("#edp").prop("disabled",false);
+			} else{
+				$("#edp").prop("disabled",true);
+			}
+
+		}
+	}
+	xhttp.send(null);
+}
+</script>
+
+</head>
+<body>
+	<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+
+    <div class="navbar-header">
+     <a class="navbar-brand" href="#">
+			<div id="dm">
+				<img src="/assets/myp.png">
+			</div>
+     </a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="http://localhost:3001/profile/<%= name[0].username %>">Profile</a></li>
+      <li><a href="http://localhost:3001/contactsearch/<%= name[0].username %>">Contacts</a></li>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><%= name[0].username %><span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="http://localhost:3001/logout">Sign Out</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+	<div class="container">
+	<h1 id="h1"><%= name[0].First_Name %> <%= name[0].Last_Name %></h1>
+	</div>
+	<div id="todo-table" class="container">
+	<br><br>
+	<form  id = 'fm' margin = 70px>
+		<input type="hidden" id="uname" name="uname" value="<%= name[0].username %>" />		
+		<input type="hidden" id="uid" name="uid" value="<%= name[0]._id %>" />		
+	</form>
+	</div>
+	<div id="main" class="container">
+		<br>
+		<br>
+		<button id = "bt" >Edit</button>		
+	</div>
+	<br><br>
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+		<div id="mob" class="containr">
+			<button id = "sb">Edit</button>
+			<button id= "ed" type="submit" form="mbfm" hidden="true">Save</button>
+			<button id = "add" hidden="true" onclick="fF()">Add</button>		
+			<button id = "del" onclick="delRow()" hidden="true">Delete</button>
+		<form id="mbfm" action="/mobile" method="POST">
+			<fieldset>
+			<legend>Mobile:</legend>
+			<table id="mobtb">
+			</table>
+			</fieldset>
+		</form>
+		</div>
+		</div>
+		<div class="col-md-6">
+		<div id="lan" class="containr">
+			<button id = "sbl">Edit</button>
+			<button id= "edl" type="submit" form="llfm" hidden="true">Save</button>
+			<button id = "addl" hidden="true" onclick="fFLL()">Add</button>		
+			<button id = "dell" onclick="delRowLL()" hidden="true">Delete</button>
+		<form id="llfm" action="/landline" method="POST">
+
+			<fieldset>
+			<legend>Landline:</legend>
+			<table id="lantb">
+			</table>
+			</fieldset>
+		</form>
+		</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-9">
+		<div id="eml" class="containr">
+			<button id = "sbe">Edit</button>
+			<button id= "ede" type="submit" form="emfm" hidden="true">Save</button>
+			<button id = "adde" hidden="true" onclick="fFEM()">Add</button>		
+			<button id = "dele" hidden="true" onclick="delRowEM()">Delete</button>
+		<form id="emfm" action="/email" method="POST">
+			<fieldset>
+			<legend>Email:</legend>
+			<table id="emltb">
+			</table>
+			</fieldset>
+		</form>
+		</div>
+		</div>
+		<div class="col-md-3">
+			<div id="dm">
+				<input type='hidden' id='cdtl' class='dtl'></input></td>
+				<button id = "edp" onclick="editPerms()" hidden="true" disabled="true">Edit</button>
+				<button id= "sbp" type="submit" form="ct" hidden="true">Save</button></br>
+				<form id="ct" method="POST">
+					<fieldset>
+					<legend>Contacts:</legend>
+					<table id="cttb">
+					</table>
+					<fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+		<div id="add" class="containr">
+			<button id = "sba">Edit</button>
+			<button id= "eda" type="submit" form="adfm" hidden="true">Save</button>
+			<button id = "adda" hidden="true" onclick="fFAD()">Add</button>		
+			<button id = "dela" hidden="true" onclick="delRowAD()">Delete</button>
+		<form id="adfm" action="/address" method="POST">
+
+			<fieldset>
+			<legend>Address:</legend>
+			<table id="addtb">
+			</table>
+			</fieldset>
+		</form>
+		</div>
+		</div>
+	</div>
+</div>
+<div id="demo"></div>
+
+</body>
+</html>

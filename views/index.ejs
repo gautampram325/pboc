@@ -1,0 +1,53 @@
+<html>
+<head>
+                <title>Login</title>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ" crossorigin="anonymous"></script>
+                <link href="/assets/styles.css" rel="stylesheet" type="text/css" />
+<style>
+.containr {
+    position: relative;
+    text-align: center;
+    color: black;
+}
+
+.verify {
+    position: relative;
+
+    left: 280px;
+}
+</style>
+
+</head>
+<body>
+
+                <div id="todo-table" class="container">
+
+
+<form align = 'center' id = 'fm' margin = 70px>
+                <div class="imgcontainer">
+    <h4>Verify Yourself</h4>
+  </div>
+  
+  <div class="container">
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" id = "un" name="un" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password"  id = "pd" name="pd" required>
+
+    <button type="submit" id = "sub" formmethod="post">Login</button>
+    <label>
+      <input type="checkbox" checked="checked" name="remember"> Remember me
+    </label>
+  </div>
+
+  <div class="container" style="background-color:#f1f1f1">
+    <button type="button" class="cancelbtn">Cancel</button>
+    <span class="psw">Forgot <a href="#">password?</a></span>
+  </div>
+</form>
+
+
+</body>
+</html>

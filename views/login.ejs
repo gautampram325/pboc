@@ -1,0 +1,33 @@
+<html>
+<head>
+	<title>Login</title>
+	<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ" crossorigin="anonymous"></script>
+	<link href="/assets/styles.css" rel="stylesheet" type="text/css" />
+<style>
+.containr {
+    position: relative;
+    text-align: center;
+    color: black;
+}
+
+.verify {
+    position: relative;
+
+    left: 280px;
+}
+</style>
+
+</head>
+<body>
+	<h1>Verify Yourself</h1>
+	<div id="todo-table" class="container">
+	<form align = 'center' id = 'fm' margin = 70px>
+		<label align = 'left'>Username</label>
+		<input type="text" id = "un" name="un" align = 'right' required/><br><br>
+		<label align = 'left'>Verification Code</label>
+		<input type="password" id = "pd" name="pd" align = 'right' required/><br><br>
+		<button id = "sub" formmethod="post">Submit</button>		
+	</form>
+
+</body>
+</html>

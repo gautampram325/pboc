@@ -1,0 +1,232 @@
+<html>
+<head>
+	<title>Sign up</title>
+	<link rel="icon" href="/assets/myp.png" type="image/gif" sizes="18x18">
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+.container {
+	margin:30px;
+	padding:40px;
+}
+
+.verify {
+	padding:0px;
+	margin:95px;
+}
+
+.frm {
+	padding:10px;
+}
+
+.dem {
+	padding:0px;
+	margin:40px;
+}
+
+</style>
+<script>
+
+
+$(document).ready(function(){
+
+    loadMaxID();
+    $("#sub").click(function(){
+		unameVerify();
+	});
+
+	$("#rpd").on("focusout",function(){
+		if($("#rpd").val()===$("#pd").val()){
+			$("#sb").prop("disabled",false);			
+		} else{
+			$("#sb").prop("disabled",true);			
+			document.getElementById("demo").innerHTML = "passwords do not match";
+		}
+	});
+
+    $("#sb").click(function(){
+		postSignup();
+	});
+/*
+    $("#sbi").click(function(){
+		postSignin();
+	});
+*/
+});
+
+function unameVerify() {
+  var age = document.getElementById('fnm').value;
+  var wpm = document.getElementById('un').value;
+  var msg;
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("GET", "/uname?name=" + age + "&uname=" + wpm  , true);
+
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        if (xhttp.responseText === "Matched"){
+	      document.getElementById("demo").innerHTML = 'Username already taken. Try a different one';
+		$("#eml").prop("disabled",true);
+		$("#pd").prop("disabled",true);
+		$("#rpd").prop("disabled",true);
+	} 
+	if (xhttp.responseText === "Not Matched"){
+		
+		document.getElementById("demo").innerHTML = 'Username is available';
+		$("#eml").prop("disabled",false);
+		$("#pd").prop("disabled",false);
+		$("#rpd").prop("disabled",false);
+	}
+
+    }
+  };
+ 
+  xhttp.send(null);
+}
+
+/*
+        var res = str.substr(3, str.length);
+        var num = (parseInt(res)+1);
+	var nmstr = num.toString();
+        var idv = str.substr(0,str.length-nmstr.length)+nmstr;
+	str = idv;
+*/
+
+function loadMaxID() {
+
+  var xhttp = new XMLHttpRequest();
+
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/maxuid", true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+					
+					if (JSON.parse(x).length!==null || JSON.parse(x).length!==undefined || JSON.parse(x).length!==""){
+
+					var mobj = JSON.parse(x)._id;
+					console.log(mobj)
+				        var num = (parseInt(mobj)+1);
+					var nmstr = num.toString();
+				        var idv = mobj.substr(0,mobj.length-nmstr.length)+nmstr;
+					document.getElementById("id").value = idv;
+					}
+				}
+		}
+		xmlhttp.send(null);
+}
+
+function postSignup() {
+
+  var xhttp = new XMLHttpRequest();
+
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "/", true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+					document.getElementById("demo").innerHTML = x;
+					}
+				}
+		xmlhttp.send(null);
+}
+
+function postSignin() {
+
+  var xhttp = new XMLHttpRequest();
+	alert(document.getElementById("unm").value);
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "/login", true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+					document.getElementById("demo").innerHTML = x;
+					}
+				}
+		xmlhttp.send(null);
+}
+
+</script>
+</head>
+<body>
+	<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+
+    <div class="navbar-header">
+     <a class="navbar-brand" href="#">
+			<div id="dm">
+				<img src="/assets/myp.png">
+			</div>
+     </a>
+    </div>
+
+    <ul class="nav navbar-nav">
+
+    </ul>
+
+  </div>
+</nav>
+
+<div class="container">
+	
+	<div class="row">
+		<div class="col-md-8">
+			<h1>Sign up for an account</h1>
+		</div>
+		<div class="col-md-4">
+			<h1>Sign-in</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+		<form id = 'fm' action="/">
+			<input type="hidden" id = "id" name="id" required/>
+			<label for="name">First Name</label>
+			<input type="text" id = "fnm" name="fname" required/>
+			<label for="name">Last Name</label>
+			<input type="text" id = "lnm" name="lname" required/>
+			<label for="name">Middle Name</label>
+			<input type="text" id = "mnm" name="mname" required/>
+	 		<label for="uname">User Name</label>
+			<input type="text" id = "un" name="uname" required/>
+		 	<label for="email">Email</label>
+			<input type="email" id = "eml" name="email" required disabled="true"/>
+		 	<label for="pd">Password</label>
+			<input type="password" id = "pd" name="pd" align = 'right' required disabled="true"/>
+	 		<label for="rpd">Re-password</label>
+			<input type="password" id = "rpd" align = 'right' required disabled="true"/><br/><br/>
+			<button id = "sb" formmethod="post" disabled="true">Submit</button>		
+		</form>
+		</div>
+		<div class="col-md-5">
+			<div id="dm">
+				<button id = "sub" class="verify">Check Availability</button>		
+			</div>
+		</div>
+		<div class="col-md-2">
+			<div id="dm">
+				<img src="/assets/separator.png">
+			</div>
+		</div>
+		<div class="col-md-3">
+		<form id = 'frm' class="frm" action="/login" method="POST">
+			<label for="un">Username</label>
+			<input type="text" id = "unm" name="unm" required/><br><br>
+			<label for="pd">Password</label>
+			<input type="password" id = "pwd" name="pwd" required/><br><br>
+			<button id = "sbi">Submit</button>		
+		</form>
+
+		</div>
+			
+	</div>
+</div>
+	<div id="demo" class="dem"></div>
+</body>
+</html>

@@ -1,0 +1,484 @@
+<html>
+<head>
+	<title>Your Contacts</title>
+	<link rel="icon" href="/assets/myp.png" type="image/gif" sizes="18x18">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    width: 250px;
+    cursor: pointer;
+}
+
+.buttn {
+    background-color: #111111;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    width: 250px;
+    cursor: pointer;
+}
+
+</style>
+<script>
+	var mdtcdarr = [];
+	var mdtvalarr = [];
+	var carray = [];
+
+$(document).ready(function(){
+
+	loadContacts();
+
+        $("#sb").click(function(){
+		console.log(document.getElementById("gg").value);
+
+	});
+
+        $("#btn").click(function(){
+		$("#bttb").empty();
+		$("#bntb").empty();
+		$("#mobtb").empty();
+		$("#lantb").empty();
+		$("#emltb").empty();
+		$("#addtb").empty();
+		document.getElementById("main").innerHTML = "";
+		searchResult();
+		$("#edt").prop("hidden",true);
+		$("#sbt").prop("hidden",true);
+		$("#sbmt").prop("hidden",true);
+	});
+
+	$("#bttb").on('click',"button", function(){
+		var cid=this.id;
+
+		$("#main").css("font-size",40);
+		document.getElementById("main").innerHTML = $(this).html();
+		$("#mobtb tr").remove();
+		loadConDtl(cid);
+		if(document.getElementById("cttb").rows.length > 0){
+			$("#edt").prop("hidden",false);
+		} else{
+			$("#edt").prop("hidden",true);
+		}
+		$("#sbt").prop("hidden",true);
+		$(".cdtl").prop("disabled",true);
+		loadPerms(cid);
+	});
+
+	$("#bttb").on('click',"button", function(){
+		document.getElementById("ufname").value = "";
+		document.getElementById("ulname").value = "";
+		document.getElementById("uid").value = this.id;
+		if(carray.indexOf(this.id)>-1){
+			$("#sbmt").prop("hidden",true);
+		}
+	});
+
+
+	$("#bntb").on('click', "button", function(){
+
+		if(this.id === document.getElementById("uname").value){
+			$("#sbmt").prop("hidden",true);
+			window.open("http://localhost:3001/profile/"+this.id, "_self");
+		} else{
+			if(carray.indexOf(this.id)<0){
+				$("#sbmt").prop("hidden",false);
+			}
+			$("#main").css("font-size",40);
+			document.getElementById("uid").value = this.id;
+
+
+			document.getElementById("main").innerHTML = $(this).html();
+			loadConDtl(this.id);
+			$("#sbt").prop("hidden",true);
+			if(document.getElementById("cttb").rows.length > 0){
+				$("#edt").prop("hidden",false);
+			} else{
+				$("#edt").prop("hidden",true);
+			}
+			loadPerms(this.id);
+			$(".cdtl").prop("disabled",true);
+		}
+	});
+
+	$("#bntb").on('click',"tr", function(){
+		document.getElementById("ufname").value = $("#f"+this.rowIndex).val();
+		document.getElementById("ulname").value = $("#l"+this.rowIndex).val();
+	});
+
+	loadYourCdtl();
+
+});
+
+function loadContacts() {
+
+  var xhttp = new XMLHttpRequest();
+  var uname = document.getElementById("uname").value;
+
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/contact/"+uname, true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+
+					if (JSON.parse(x).length>0){
+
+					var cdtl;
+					var obj = JSON.parse(x);
+					for(i=0;i<JSON.parse(x).length;i++){
+
+						cdtl = obj[i].contact;
+						obj[i].cFName + " " + obj[i].cLName;
+						carray.push(cdtl);
+
+
+						var markup = "<tr><td><button id="+ cdtl+" class='button'>"+obj[i].cFName+" "+obj[i].cLName+"</button></td></tr>";
+						$("#bttb").append(markup);
+						}
+					}
+				}
+		}
+		xmlhttp.send(null);
+
+}
+
+
+function loadConDtl(contact) {
+
+  var xhttp = new XMLHttpRequest();
+  var uname = document.getElementById("uname").value;
+
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/infoshare/"+contact+"/"+uname, true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+
+					if (JSON.parse(x).length>0){
+
+					var cdtl, y, cobj;
+					var obj = JSON.parse(x);
+					for(i=0;i<JSON.parse(x).length;i++){
+
+						cdtl = obj[i].cdtl;
+
+						fetchContactInfo(cdtl);
+
+						}
+					} 
+				}
+		}
+		xmlhttp.send(null);
+}
+
+function fetchContactInfo(cdtl){
+						var xhttp = new XMLHttpRequest();
+						var tcd = cdtl.substr(4,3);
+						xhttp.open("GET", "/cdtl/"+cdtl, true);
+						xhttp.onreadystatechange = function() {
+						if (xhttp.readyState == 4 && xhttp.status == 200) {
+							y = xhttp.responseText;
+							if(JSON.parse(y).length>0){
+							cobj=JSON.parse(y)[0].contactno;
+							} else{
+							cobj="";
+							}
+						var markup = "<tr><td><h4>"+cobj+"</h4></td></tr>";
+
+						switch(tcd) {
+					    		case "MOB":
+								$("#mobtb").append(markup);
+								break;
+						        case "LAN":
+								$("#lantb").append(markup);
+								break;
+						        case "EML":
+								$("#emltb").append(markup);
+								break;
+						        case "ADD":
+								$("#addtb").append(markup);
+								break;
+							}
+
+							}
+						}
+						xhttp.send(null);
+}
+
+
+function loadYourCdtl() {
+
+  var xhttp = new XMLHttpRequest();
+  var uname = document.getElementById("uname").value;
+
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/yourdetails/"+uname, true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+
+					if (JSON.parse(x).length>0){
+
+					var cfname ,clname ,cnm;
+					var obj = JSON.parse(x);
+					for(i=0;i<JSON.parse(x).length;i++){
+
+						label = obj[i].label;
+						cinfo = obj[i].contactno;
+						cdtl = obj[i]._id;
+
+						var markup = "<tr><td><input type='text' class='cfn' value="+label+" disabled='true'></td><td><input type='text' class='cln' value="+"'"+cinfo+"'"+" disabled='true'></input></td><td><input type='checkbox' class='cdtl' name=" +"cdtl"+i+" value="+cdtl+" disabled='true'></td></tr>";
+						$("#cttb").append(markup);
+						}
+					} else{
+						$("#edt").prop("hidden",true);
+					}
+				}
+		}
+		xmlhttp.send(null);
+}
+
+function loadPerms(contact) {
+
+  var xhttp = new XMLHttpRequest();
+  var uname = document.getElementById("uname").value;
+  var carr = [];
+			$(".cdtl").prop("checked",false);
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/infoshare/"+uname+"/"+contact, true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+
+					if (JSON.parse(x).length>0){
+
+						var uid,lblv,numv;
+						var obj = JSON.parse(x);
+						for(i=0;i<obj.length;i++){
+							console.log(obj[i].cdtl);
+//							carr.push(obj[i].cdtl);
+							$(".cdtl").each(function(){
+							if($(this).val()===obj[i].cdtl){
+								$(this).prop("checked",true);
+								}
+							});
+						}
+
+					}
+				}
+			}
+		xmlhttp.send(null);
+}
+
+function editMode() {
+	var x = document.getElementById("edt");
+	var y = document.getElementById("sbt");
+	var z = document.getElementById("uid").value;
+
+	$(".cdtl").prop("disabled", false);
+	y.hidden = false;
+	x.hidden = true;
+	$("#ct").prop('action','/permissions/'+z);
+}
+
+function searchResult() {
+
+	var keyword = document.getElementById("search").value;
+
+	var xhttp = new XMLHttpRequest();
+	var uname = document.getElementById("uname").value;
+
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "/contactmatch/"+uname+"/"+keyword, true);
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					var x = xmlhttp.responseText;
+
+					if (JSON.parse(x).length>0){
+
+					var cdtl;
+					var obj = JSON.parse(x);
+					for(i=0;i<JSON.parse(x).length;i++){
+
+						cdtl = obj[i].contact;
+
+						var markup = "<tr><td><button id="+ cdtl+" class='button'>"+obj[i].cFName+" "+obj[i].cLName+"</button></td></tr>";
+						$("#bttb").append(markup);
+						}
+					} else{
+					if(!document.getElementById("h3")){
+						var markup = "<tr><td><h5 id='h3'>No Matching Contacts Found</h5></td></tr>";
+						$("#bttb").append(markup);
+						}
+					}
+				}
+		}
+		xmlhttp.send(null);
+//		console.log("carray     "+carray);
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("GET", "/peoplematch/"+keyword, true);
+			xhttp.onreadystatechange = function() {
+				if (xhttp.readyState == 4 && xhttp.status == 200) {
+					var y = xhttp.responseText;
+						console.log(JSON.parse(y).length);
+					if (JSON.parse(y).length>0){
+
+					var cdt;
+					var obj = JSON.parse(y);
+					for(i=0;i<JSON.parse(y).length;i++){
+
+
+						cdt = obj[i].username;
+						console.log("Position   " + carray.indexOf(cdt));
+						if(carray.indexOf(cdt)<0){
+//							if(!document.getElementById("h5")){
+//								var markup = "<tr><td><h5 id='h5'>Outside your contact list</h5></td></tr>";
+//								$("#bntb").append(markup);
+//							}
+
+							var markup = "<tr><td><button id="+ cdt+" class='button'>"+obj[i].First_Name+" "+obj[i].Last_Name+"</button></td><td><input type='hidden' id=f"+i+" class='hf' value="+"'"+obj[i].First_Name+"'"+"></input></td><td><input type='hidden' id=l"+i+" class='hl' value="+"'"+obj[i].Last_Name+"'"+"></input></td></tr>";
+							$("#bntb").append(markup);
+						}
+						}
+					} else{
+//					if(!document.getElementById("h4")){
+//						var markup = "<tr><td><h5 id='h4'>No Results Found</h5></td></tr>";
+//						$("#bntb").append(markup);
+//						}
+					}
+				}
+		}
+		xhttp.send(null);
+}
+
+</script>
+</head>
+<body>  
+	<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+
+    <div class="navbar-header">
+     <a class="navbar-brand" href="#">
+			<div id="dm">
+				<img src="/assets/myp.png">
+			</div>
+     </a>
+    </div>
+
+    <ul class="nav navbar-nav">
+      <li><a href="http://localhost:3001/profile/<%= user[0].username %>">Profile</a></li>
+      <li class="active"><a href="http://localhost:3001/contactsearch/<%= user[0].username %>">Contacts</a></li>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><%= user[0].username %><span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="http://localhost:3001/logout">Sign Out</a></li>
+        </ul>
+      </li>
+    </ul>
+	<div id="mn" class="container">
+		<input type="hidden" id="uname" name="uname" value="<%= user[0].username %>" />		
+		<input type="search" id="search" name="contactsearch" size="60" placeholder="Search for people">
+		<button id="btn">Search</button>
+	</div>
+  </div>
+</nav>
+	
+	<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<div id="bt">
+				<table id="bttb">
+				</table>
+			</div>
+			<div id="btt">
+				<table id="bntb">
+				</table>
+			</div>
+		</div>
+		<div class="col-md-4">
+		<div id="main" class="containr"><h1></h1></div>
+		<div id="frm" class="containr">
+				<form id="addfm" action='/addcontact' method='POST'>
+					<input type="hidden" id="uid" name="uid" />		
+					<input type="hidden" id="ufname" name="ufname"/>		
+					<input type="hidden" id="ulname" name="ulname"/>		
+					<button type="submit" id="sbmt" hidden="true">Add to Contact List</button>
+				</form>
+		</div>
+			</br>
+			</br>
+			<div id="mob" class="containr" align="left" width="30px" >
+				<form id="mbfm">
+					<fieldset>
+					<legend>Mobile</legend>
+						<table id="mobtb">
+						</table>
+					</fieldset>
+				</form>
+			</div>
+			<div id="lan" class="containr" align="left" width="30px" >
+				<form id="llfm">
+					<fieldset>
+					<legend>Landline</legend>
+						<table id="lantb">
+						</table>
+					</fieldset>
+				</form>
+			</div>
+			<div id="eml" class="containr" align="left" width="30px" >
+				<form id="emfm">
+					<fieldset>
+					<legend>Email</legend>
+						<table id="emltb">
+						</table>
+					</fieldset>
+				</form>
+			</div>
+			<div id="add" class="containr" align="left" width="30px" >
+				<form id="adfm">
+					<fieldset>
+					<legend>Address</legend>
+						<table id="addtb">
+						</table>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div>
+				<button id="edt" onclick="editMode()" hidden="true">Edit</button>
+				<button type="submit" id="sbt" hidden="true" form="ct">Save</button>
+			</div>
+			<div id="dm">
+				<form id="ct" method="POST">
+					<table id="cttb">
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+	</div>
+
+</body>
+</html>
